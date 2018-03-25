@@ -38,7 +38,7 @@ SET default_with_oids = false;
 -- Name: comments; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE comments (
+CREATE UNLOGGED TABLE comments (
     rid integer,
     review_uid integer,
     comment_uid integer
@@ -51,7 +51,7 @@ ALTER TABLE comments OWNER TO postgres;
 -- Name: reviews; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE reviews (
+CREATE UNLOGGED TABLE reviews (
     rid integer,
     menu text,
     score integer,
@@ -71,7 +71,7 @@ ALTER TABLE reviews OWNER TO postgres;
 -- Name: shops; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE shops (
+CREATE UNLOGGED TABLE shops (
     sid integer NOT NULL,
     name text,
     branch text,
@@ -88,7 +88,7 @@ ALTER TABLE shops OWNER TO postgres;
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE users (
+CREATE UNLOGGED TABLE users (
     uid integer NOT NULL,
     name text,
     reviews integer,
