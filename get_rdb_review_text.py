@@ -36,7 +36,7 @@ def printReview(num):
 		if descNode is None :
 			description = ""
 		else :
-			description = descNode.string.replace('\n', ' ').replace('\t', ' ')
+			description = descNode.text.replace('\n', ' ').replace('\r', ' ').replace('\t', ' ').replace('\\', '￥')
 
 		try:
 			description.encode('cp932','ignore').decode('cp932')
