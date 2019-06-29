@@ -35,7 +35,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: comments; Type: TABLE; Schema: public; Owner: postgres
+-- Name: comments; Type: TABLE; Schema: public; 
 --
 
 CREATE UNLOGGED TABLE comments (
@@ -45,10 +45,8 @@ CREATE UNLOGGED TABLE comments (
 );
 
 
-ALTER TABLE comments OWNER TO postgres;
-
 --
--- Name: reviews; Type: TABLE; Schema: public; Owner: postgres
+-- Name: reviews; Type: TABLE; Schema: public; 
 --
 
 CREATE UNLOGGED TABLE reviews (
@@ -64,11 +62,13 @@ CREATE UNLOGGED TABLE reviews (
 );
 
 
-ALTER TABLE reviews OWNER TO postgres;
-
+CREATE UNLOGGED TABLE reviews_text (
+    rid integer,
+    data text
+);
 
 --
--- Name: shops; Type: TABLE; Schema: public; Owner: postgres
+-- Name: shops; Type: TABLE; Schema: public; 
 --
 
 CREATE UNLOGGED TABLE shops (
@@ -82,10 +82,8 @@ CREATE UNLOGGED TABLE shops (
 );
 
 
-ALTER TABLE shops OWNER TO postgres;
-
 --
--- Name: users; Type: TABLE; Schema: public; Owner: postgres
+-- Name: users; Type: TABLE; Schema: public; 
 --
 
 CREATE UNLOGGED TABLE users (
@@ -99,10 +97,15 @@ CREATE UNLOGGED TABLE users (
 );
 
 
-ALTER TABLE users OWNER TO postgres;
+
+ALTER TABLE ONLY reviews
+    ADD CONSTRAINT reviews_pkey PRIMARY KEY (rid);
+
+ALTER TABLE ONLY reviews_text
+    ADD CONSTRAINT reviews_text_pkey PRIMARY KEY (rid);
 
 --
--- Name: shops shops_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: shops shops_pkey; Type: CONSTRAINT; Schema: public; 
 --
 
 ALTER TABLE ONLY shops
@@ -110,7 +113,7 @@ ALTER TABLE ONLY shops
 
 
 --
--- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; 
 --
 
 ALTER TABLE ONLY users
@@ -118,7 +121,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: kanagawa_area_map; Type: TABLE; Schema: public; Owner: postgres
+-- Name: kanagawa_area_map; Type: TABLE; Schema: public; 
 --
 
 CREATE TABLE kanagawa_area_map (
@@ -127,10 +130,8 @@ CREATE TABLE kanagawa_area_map (
 );
 
 
-ALTER TABLE kanagawa_area_map OWNER TO postgres;
-
 --
--- Data for Name: kanagawa_area_map; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: kanagawa_area_map; Type: TABLE DATA; Schema: public; 
 --
 
 COPY kanagawa_area_map (area, wide_area) FROM stdin;
