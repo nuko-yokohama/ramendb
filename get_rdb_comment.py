@@ -64,7 +64,12 @@ def printComment(num):
 					comment_id = url2uid(url)
 					if comment_id != user_id :
 #						print("comment_id=", comment_id)
-						print(num, '\t', user_id, '\t', comment_id)
+						cm = format(num) + '\t' + format(user_id) + '\t' + format(comment_id)
+
+						try:
+							print(cm.encode('cp932','ignore').decode('cp932'))
+						except UnicodeError as e:
+							print("Unicode error", e)
 
 			if (num % 100) == 0  :
 				sys.stderr.write ('progress, num=' + format(num) + '\n')
