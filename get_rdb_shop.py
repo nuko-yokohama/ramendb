@@ -67,7 +67,12 @@ def printShop(num):
 			modified = url2uid(links[2].attrs['href'])
 
 		# output shop record
-		print(num, '\t', shopName, '\t', branch, '\t', pref, '\t', area, '\t', created, '\t', modified)
+		shop = format(num) + '\t'+ shopName + '\t' + branch + '\t' + pref + '\t' + area + '\t' + created + '\t' + modified
+		try:
+			print(shop.encode('cp932','ignore').decode('cp932'))
+		except UnicodeError as e:
+			print("Unicode error", e)
+#		print(num, '\t', shopName, '\t', branch, '\t', pref, '\t', area, '\t', created, '\t', modified)
 	except:
 		pass
 
