@@ -60,7 +60,7 @@ def printShop(num):
 		if len(links) == 4 :
 			# exist created only
 			created = url2uid(links[0].attrs['href'])
-			modified = ""
+			modified = "0"
 		else :
 			# exist created and modified
 			created = url2uid(links[0].attrs['href'])
