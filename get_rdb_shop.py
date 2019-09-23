@@ -16,7 +16,7 @@ def url2uid(url):
 # print shop infomation
 #
 def printShop(num):
-	url = 'https://ramendb.supleks.jp/s/' + str(num) + '.html'
+	url = 'https://supleks.jp/s/' + str(num) + '.html'
 	try:
 		res = req.urlopen(url)
 		soup = BeautifulSoup(res, "html.parser")
