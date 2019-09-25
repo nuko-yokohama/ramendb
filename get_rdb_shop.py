@@ -13,6 +13,16 @@ def url2uid(url):
 	return url.replace('/u/','').replace('.html', '')
 	
 #
+# get_site_flag(node)
+#
+def get_site_flag(node):
+	if node.has_attr('class') :
+		flag = "false"
+	else :
+		flag = "true"
+	return flag
+
+#
 # print shop infomation
 #
 def printShop(num):
@@ -21,6 +31,7 @@ def printShop(num):
 		res = req.urlopen(url)
 		soup = BeautifulSoup(res, "html.parser")
 		if soup is None :
+			sys.stderr.write ('html.paser error, num=' + format(num) + '\n')
 			return
 
 		# shop name
@@ -31,7 +42,6 @@ def printShop(num):
 			shopName =shopNode.string
 
 		# shop branch
-
 		branchNode  = soup.find('span', class_="branch")
 		if branchNode is None :
 			branch = ""
@@ -57,8 +67,13 @@ def printShop(num):
 			# Skip
 			print("num=',num, ',links is None")
 
-		if len(links) == 4 :
+		if len(links) == 2 :
+			# created and modified link empty
+			created = "0"
+			modified = "0"
+		elif len(links) == 4 :
 			# exist created only
+			# TODO: moderator crated, user modified case. 
 			created = url2uid(links[0].attrs['href'])
 			modified = "0"
 		else :
@@ -66,14 +81,30 @@ def printShop(num):
 			created = url2uid(links[0].attrs['href'])
 			modified = url2uid(links[2].attrs['href'])
 
+		# shop tabs
+		div_shop_tabs = soup.find('div', id='shop-tabs')
+		# print("div_shop_tabs=", div_shop_tabs)
+		links = div_shop_tabs.find_all('a')
+		if links is None :
+			# Skip
+			print("num=',num, ',shop tabs links is None")
+		ramendb = get_site_flag(links[1]) 
+		currydb = get_site_flag(links[2]) 
+		chahandb = get_site_flag(links[3]) 
+		gyouzadb = get_site_flag(links[4]) 
+		udondb = get_site_flag(links[5]) 
+		sobadb = get_site_flag(links[6])
+
+		site_info = '{' + '"ramendb":' + ramendb + ',"currydb":' + currydb + ',"chahandb":' + chahandb + ',"gyouzadb":' + gyouzadb + ',"udondb":' + udondb + ',"sobadb":' + sobadb + "}"
+
 		# output shop record
-		shop = format(num) + '\t'+ shopName + '\t' + branch + '\t' + pref + '\t' + area + '\t' + created + '\t' + modified
+		shop = format(num) + '\t'+ shopName + '\t' + branch + '\t' + pref + '\t' + area + '\t' + created + '\t' + modified + '\t' + site_info
 		try:
 			print(shop.encode('cp932','ignore').decode('cp932'))
 		except UnicodeError as e:
 			print("Unicode error", e)
-#		print(num, '\t', shopName, '\t', branch, '\t', pref, '\t', area, '\t', created, '\t', modified)
 	except:
+		sys.stderr.write ('exception, num=' + format(num) + '\n')
 		pass
 
 # メインメソッド
