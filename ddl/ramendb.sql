@@ -73,6 +73,7 @@ CREATE UNLOGGED TABLE reviews_text (
 
 CREATE UNLOGGED TABLE shops (
     sid integer NOT NULL,
+    status text, -- open, closed, moved
     name text,
     branch text,
     pref text,

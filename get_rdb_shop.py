@@ -23,6 +23,19 @@ def get_site_flag(node):
 	return flag
 
 #
+# get status(soup)
+#
+
+#
+def get_status(soup):
+	statusNode = soup.find('span', class_="plate retire")
+	if statusNode is not None :
+		return "closed"
+	statusNode = soup.find('span', class_="plate moved")
+	if statusNode is not None :
+		return "moved"
+	return "open"
+
 # print shop infomation
 #
 def printShop(num):
@@ -33,6 +46,9 @@ def printShop(num):
 		if soup is None :
 			sys.stderr.write ('html.paser error, num=' + format(num) + '\n')
 			return
+
+		# shop status
+		status = get_status(soup)
 
 		# shop name
 		shopNode = soup.find('span', class_="shopname")
@@ -87,7 +103,7 @@ def printShop(num):
 		links = div_shop_tabs.find_all('a')
 		if links is None :
 			# Skip
-			print("num=',num, ',shop tabs links is None")
+			sys.stderr.write("num=',num, ',shop tabs links is None\n")
 		ramendb = get_site_flag(links[1]) 
 		currydb = get_site_flag(links[2]) 
 		chahandb = get_site_flag(links[3]) 
@@ -98,7 +114,7 @@ def printShop(num):
 		site_info = '{' + '"ramendb":' + ramendb + ',"currydb":' + currydb + ',"chahandb":' + chahandb + ',"gyouzadb":' + gyouzadb + ',"udondb":' + udondb + ',"sobadb":' + sobadb + "}"
 
 		# output shop record
-		shop = format(num) + '\t'+ shopName + '\t' + branch + '\t' + pref + '\t' + area + '\t' + created + '\t' + modified + '\t' + site_info
+		shop = format(num) + '\t'+ status + '\t' + shopName + '\t' + branch + '\t' + pref + '\t' + area + '\t' + created + '\t' + modified + '\t' + site_info
 		try:
 			print(shop.encode('cp932','ignore').decode('cp932'))
 		except UnicodeError as e:
