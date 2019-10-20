@@ -80,7 +80,9 @@ CREATE UNLOGGED TABLE shops (
     area text,
     insert_uid integer,
     update_uid integer,
-    category jsonb  -- PostgreSQL 9.4-
+    category jsonb,  -- PostgreSQL 9.4-
+    point numeric,
+    reg_date date
 );
 
 

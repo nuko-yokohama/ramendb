@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import urllib.request as req
 import sys
+import datetime
 
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL)
@@ -35,6 +36,21 @@ def get_status(soup):
 	if statusNode is not None :
 		return "moved"
 	return "open"
+
+#
+# get shop point
+#
+def get_shop_point(s):
+	int_point = s.find('span', class_="int")
+	if int_point is None :
+		return '0'
+	if int_point.string == '-' :
+		return '0'
+	float_point = s.find('span', class_="float")
+	if float_point is None :
+		return int_point
+
+	return int_point.string + float_point.string
 
 # print shop infomation
 #
@@ -111,10 +127,16 @@ def printShop(num):
 		udondb = get_site_flag(links[5]) 
 		sobadb = get_site_flag(links[6])
 
-		site_info = '{' + '"ramendb":' + ramendb + ',"currydb":' + currydb + ',"chahandb":' + chahandb + ',"gyouzadb":' + gyouzadb + ',"udondb":' + udondb + ',"sobadb":' + sobadb + "}"
+		# get point
+		shop_point = get_shop_point(soup)
+
+		# regist date
+		reg_date = datetime.date.today()
+
+		category = '{' + '"ramendb":' + ramendb + ',"currydb":' + currydb + ',"chahandb":' + chahandb + ',"gyouzadb":' + gyouzadb + ',"udondb":' + udondb + ',"sobadb":' + sobadb + "}"
 
 		# output shop record
-		shop = format(num) + '\t'+ status + '\t' + shopName + '\t' + branch + '\t' + pref + '\t' + area + '\t' + created + '\t' + modified + '\t' + site_info
+		shop = format(num) + '\t'+ status + '\t' + shopName + '\t' + branch + '\t' + pref + '\t' + area + '\t' + created + '\t' + modified + '\t' + category + '\t' + shop_point + '\t' + format(reg_date)
 		try:
 			print(shop.encode('cp932','ignore').decode('cp932'))
 		except UnicodeError as e:
