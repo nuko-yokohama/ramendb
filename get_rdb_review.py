@@ -45,6 +45,7 @@ def printReview(num):
 			score = -1
 		else :
 			score = scoreNode.text.replace('点','')
+			score = scoreNode.text.replace('未満','')
 
 		# noodle_type, soup_type
 		styleNode = soup.find('span', class_="style")
