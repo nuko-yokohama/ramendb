@@ -142,7 +142,7 @@ def printShop(num):
 		except UnicodeError as e:
 			print("Unicode error", e)
 	except:
-		sys.stderr.write ('exception, num=' + format(num) + '\n')
+		sys.stderr.write ('\n' + 'exception, num=' + format(num) + '\n')
 		pass
 
 # メインメソッド
