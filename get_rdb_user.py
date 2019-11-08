@@ -6,13 +6,13 @@ import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 def printUser(num):
-	url = 'https://ramendb.supleks.jp/u/' + str(num) + '.html'
+	url = 'https://supleks.jp/u/' + str(num) + '.html'
 	try:
 		res = req.urlopen(url)
 		soup = BeautifulSoup(res, "html.parser")
-
 		# user name
-		userName = soup.select_one(".profile > h2").string
+		nameLevel = soup.find('div', id="name-level")
+		userName = nameLevel.find('h2').string
 
 		# user profile string
 		prop  = soup.select_one(".profile > div.props")
