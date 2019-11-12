@@ -194,6 +194,21 @@ COPY kanagawa_area_map (area, wide_area) FROM stdin;
 \.
 
 
+CREATE VIEW shops2 AS
+SELECT
+  CASE 
+    WHEN pref = '北海道' THEN '北海道'
+    WHEN pref IN ('青森県', '秋田県', '岩手県', '山形県', '宮城県', '福島県') THEN '東北'
+    WHEN pref IN ('群馬県', '栃木県', '茨城県', '埼玉県', '千葉県', '東京都', '神奈川県') THEN '関東'
+    WHEN pref IN ('新潟県', '長野県', '静岡県', '岐阜県', '愛知県', '福井県') THEN '中部'
+    WHEN pref IN ('京都府', '奈良県', '三重県', '和歌山県', '大阪府', '兵庫県') THEN '近畿'
+    WHEN pref IN ('鳥取県', '島根県', '岡山県', '広島県', '山口県') THEN '中国'
+    WHEN pref IN ('香川県', '愛媛県', '徳島県', '高知県') THEN '四国'
+    WHEN pref IN ('福岡県', '大分県', '宮崎県', '佐賀県', '長崎県', '熊本県', '鹿児島県', '沖縄県') THEN '九州'
+    ELSE '海外'
+  END AS wide_area, *
+FROM shops;
+
 --
 -- PostgreSQL database dump complete
 --
