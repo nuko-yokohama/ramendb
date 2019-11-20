@@ -52,6 +52,24 @@ def get_shop_point(s):
 
 	return int_point.string + float_point.string
 
+# get tags
+def get_tags(links):
+	if links is None :
+		return '\\N'
+
+	l = len(links)
+	if l == 0 :
+		return '\\N'
+
+	for i in range(l) :
+		if i == 0 :
+			elems = links[i].text 
+		else :
+			elems = elems + ',' + links[i].text 
+	tags = "{" + elems + "}"
+	# print(tags)
+	return tags
+
 # print shop infomation
 #
 def printShop(num):
@@ -113,6 +131,10 @@ def printShop(num):
 			created = url2uid(links[0].attrs['href'])
 			modified = url2uid(links[2].attrs['href'])
 
+		# regist date
+		span_elm = div_created.find_all('span')
+		reg_date = span_elm[0].text.strip().replace('年','-').replace('月','-').replace('日登録','')
+
 		# shop tabs
 		div_shop_tabs = soup.find('div', id='shop-tabs')
 		# print("div_shop_tabs=", div_shop_tabs)
@@ -130,13 +152,17 @@ def printShop(num):
 		# get point
 		shop_point = get_shop_point(soup)
 
+		# get tags
+		tagLinks = soup.find_all('a', class_='tag')
+		tags = get_tags(tagLinks)
+
 		# regist date
-		reg_date = datetime.date.today()
+		# reg_date = datetime.date.today()
 
 		category = '{' + '"ramendb":' + ramendb + ',"currydb":' + currydb + ',"chahandb":' + chahandb + ',"gyouzadb":' + gyouzadb + ',"udondb":' + udondb + ',"sobadb":' + sobadb + "}"
 
 		# output shop record
-		shop = format(num) + '\t'+ status + '\t' + shopName + '\t' + branch + '\t' + pref + '\t' + area + '\t' + created + '\t' + modified + '\t' + category + '\t' + shop_point + '\t' + format(reg_date)
+		shop = format(num) + '\t'+ status + '\t' + shopName + '\t' + branch + '\t' + pref + '\t' + area + '\t' + created + '\t' + modified + '\t' + category + '\t' + shop_point + '\t' + tags + '\t' + format(reg_date)
 		try:
 			print(shop.encode('cp932','ignore').decode('cp932'))
 		except UnicodeError as e:
