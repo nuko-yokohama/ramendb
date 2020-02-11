@@ -5,6 +5,7 @@
 
 --
 -- 神奈川の家系レビュー(IMV)
+-- 実験的にこのビューをIMVで作成する。このビューに対するORDER BY LIMITがそのままだとイケてないので、reg_date に改めてbtreeを設定したほうが良さげ。
 --
 CREATE INCREMENTAL MATERIALIZED VIEW kanagawa_house_review_imv AS
 SELECT s.sid,
@@ -19,7 +20,7 @@ SELECT s.sid,
 ;
 
 --
--- 神奈川の家系レビュー(VIEW)
+-- 神奈川の家系レビュー(VIEW)  
 --
 CREATE VIEW kanagawa_house_review_v AS
 SELECT s.sid,
@@ -34,27 +35,10 @@ SELECT s.sid,
 ;
 
 --
--- 神奈川・東京のサンマーメンレビュー(IMV)
+-- 神奈川・東京のサンマーメンレビュー(View)
+-- 現状のIVMの実装だと、こうしたフルスキャンが発生するクエリを含むときの更新オーバヘッドが大きいのでビューにする。 
 --
-CREATE VIEW AS sanmamen_v
-SELECT s.sid,
-    s.pref,
-    s.area,
-    s.name,
-    s.branch,
-    s.status,
-    r.menu,
-    r.score,
-    r.reg_date
-   FROM shops s
-     JOIN reviews r ON s.sid = r.sid
-  WHERE (s.pref = ANY (ARRAY['神奈川県', '東京都'])) AND s.status = 'open' AND r.menu ~ '((さんま|サンマ)[(ー|あ|ぁ)]|生(馬|碼))(めん|メン|麺)'
-;
-
---
--- 神奈川・東京のサンマーメンレビュー(VIEW)
---
-CREATE INCREMENTAL MATERIALIZED VIEW sanmamen_imv AS
+CREATE VIEW sanmamen_v AS
 SELECT s.sid,
     s.pref,
     s.area,
@@ -76,7 +60,7 @@ CREATE INCREMENTAL MATERIALIZED VIEW shops_agg AS
 SELECT 'shops' AS tablename, COUNT(*) AS count, MAX(sid) AS "max", MIN(sid) AS "min" FROM shops;
 
 CREATE INCREMENTAL MATERIALIZED VIEW reviews_agg AS 
-SELECT 'reviews' AS tablename, COUNT(*) AS count, MAX(sid) AS "max", MIN(sid) AS "min" FROM reviews;
+SELECT 'reviews' AS tablename, COUNT(*) AS count, MAX(rid) AS "max", MIN(rid) AS "min" FROM reviews;
 
 CREATE INCREMENTAL MATERIALIZED VIEW users_agg AS 
 SELECT 'users' AS tablename, COUNT(*) AS count, MAX(uid) AS "max", MIN(uid) AS "min" FROM users;
