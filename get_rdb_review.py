@@ -58,11 +58,13 @@ def printReview(num):
 			return
 
 		# menu
-		menuNode = soup.find('span', itemprop="itemReviewed")
+		# menuNode = soup.find('span', itemprop="itemReviewed")
+		menuNode = soup.find('div', class_="menu")
 		if menuNode is None :
 			menu = ""
 		else :
-			menu =menuNode.string
+			menu_a = menuNode.find_all('a')
+			menu = menu_a[0].text
 			menu = menu.replace(chr(165), '￥').replace('\\', '￥').replace('&','＆')
 			menu = menu.replace('	', ' ')
 
