@@ -71,3 +71,12 @@ SELECT 'users' AS tablename, COUNT(*) AS count, MAX(uid) AS "max", MIN(uid) AS "
 CREATE VIEW aggs_v AS 
 SELECT * FROM shops_agg UNION SELECT * FROM reviews_agg UNION SELECT * FROM users_agg;
 
+--
+-- 横浜市内でまだ自分がラーメンレビューを登録していない店舗ビュー
+--
+CREATE VIEW nuko_noreview_yokohama AS 
+SELECT s.sid, s.area, s.name, s.branch 
+FROM shops s 
+WHERE s.area ~ '横浜市*' AND s.status = 'open' AND s.category @> '{"ramendb":true}' AND 
+  s.sid NOT IN (SELECT sid FROM reviews WHERE uid = 8999);
+
