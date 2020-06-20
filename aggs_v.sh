@@ -1,5 +1,4 @@
 #!/bin/sh
-PORT=5432
 DB=ramendb
 USER=postgres
 
