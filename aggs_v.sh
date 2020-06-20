@@ -1,6 +1,7 @@
 #!/bin/sh
+# Retrieve View 
 DB=ramendb
 USER=postgres
 
-psql -p ${PORT} -U ${USER} ${DB} -c "TABLE aggs_v"
+psql -U ${USER} ${DB} -c "TABLE aggs_v"
 
