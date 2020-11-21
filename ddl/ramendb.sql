@@ -194,6 +194,9 @@ COPY kanagawa_area_map (area, wide_area) FROM stdin;
 高座郡	湘南
 \.
 
+--
+-- additional view
+--
 
 CREATE VIEW shops2 AS
 SELECT
@@ -209,6 +212,37 @@ SELECT
     ELSE '海外'
   END AS wide_area, *
 FROM shops;
+
+--
+-- どのユーザがどのareaに何件レビューを上げたかを表すビュー
+--
+CREATE VIEW user_review_area AS
+SELECT u.uid,
+   s.pref,
+   s.area,
+   count(r.rid) AS count,
+   max(r.reg_date) AS max
+FROM shops s
+    JOIN reviews r ON s.sid = r.sid
+    JOIN users u ON r.uid = u.uid
+GROUP BY u.uid, s.pref, s.area
+;
+
+--
+-- 登録ユーザのホーム(最もレビューを上げているかつ最近レビューを上げたarea)を求めるビュー
+--
+CREATE VIEW user_home_v AS
+SELECT t.uid,
+    t.pref,
+    t.area,
+    t.count
+FROM ( SELECT user_review_area.uid,
+            user_review_area.pref,
+            user_review_area.area,
+            user_review_area.count,
+            user_review_area.max,
+            rank() OVER (PARTITION BY user_review_area.uid ORDER BY user_review_area.count DESC, user_review_area.max DESC) AS rank FROM user_review_area) t
+WHERE t.rank = 1;
 
 --
 -- PostgreSQL database dump complete
