@@ -216,12 +216,13 @@ FROM shops;
 --
 -- どのユーザがどのareaに何件レビューを上げたかを表すビュー
 --
-CREATE VIEW user_review_area AS
+CREATE VIEW user_review_area_v AS
 SELECT u.uid,
    s.pref,
    s.area,
    count(r.rid) AS count,
-   max(r.reg_date) AS max
+   max(r.reg_date) AS max,
+   max(r.rid) AS rid
 FROM shops s
     JOIN reviews r ON s.sid = r.sid
     JOIN users u ON r.uid = u.uid
@@ -236,12 +237,12 @@ SELECT t.uid,
     t.pref,
     t.area,
     t.count
-FROM ( SELECT user_review_area.uid,
-            user_review_area.pref,
-            user_review_area.area,
-            user_review_area.count,
-            user_review_area.max,
-            rank() OVER (PARTITION BY user_review_area.uid ORDER BY user_review_area.count DESC, user_review_area.max DESC) AS rank FROM user_review_area) t
+FROM ( SELECT user_review_area_v.uid,
+            user_review_area_v.pref,
+            user_review_area_v.area,
+            user_review_area_v.count,
+            user_review_area_v.max,
+            rank() OVER (PARTITION BY user_review_area_v.uid ORDER BY user_review_area_v.count DESC, user_review_area_v.rid DESC) AS rank FROM user_review_area_v) t
 WHERE t.rank = 1;
 
 --
