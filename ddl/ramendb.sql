@@ -135,6 +135,7 @@ CREATE TABLE kanagawa_area_map (
     wide_area text
 );
 
+CREATE INDEX comments_rid ON comments (rid);
 
 --
 -- Data for Name: kanagawa_area_map; Type: TABLE DATA; Schema: public; 
