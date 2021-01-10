@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "get shops data" $1 $2
+echo "get users data" $1 $2
 python3 get_rdb_user.py $1 $2 > /tmp/u.txt
 
 # load shops daat
