@@ -24,3 +24,5 @@ SELECT shops_location.sid,
 CREATE MATERIALIZED VIEW target_location_mv AS
 SELECT target_location.tid,
     (((('POINT('::text || target_location.longitude) || ' '::text) || target_location.latitude) || ')'::text)::geography AS geography
+   FROM target_location;
+
