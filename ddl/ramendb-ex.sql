@@ -59,17 +59,17 @@ SELECT s.sid,
 --
 -- shops and reviews aggregates(IMV)
 --
-CREATE INCREMENTAL MATERIALIZED VIEW shops_agg AS 
+CREATE INCREMENTAL MATERIALIZED VIEW shops_agg_imv AS 
 SELECT 'shops' AS tablename, COUNT(*) AS count, MAX(sid) AS "max", MIN(sid) AS "min" FROM shops;
 
-CREATE INCREMENTAL MATERIALIZED VIEW reviews_agg AS 
+CREATE INCREMENTAL MATERIALIZED VIEW reviews_agg_imv AS 
 SELECT 'reviews' AS tablename, COUNT(*) AS count, MAX(rid) AS "max", MIN(rid) AS "min" FROM reviews;
 
-CREATE INCREMENTAL MATERIALIZED VIEW users_agg AS 
+CREATE INCREMENTAL MATERIALIZED VIEW users_agg_imv AS 
 SELECT 'users' AS tablename, COUNT(*) AS count, MAX(uid) AS "max", MIN(uid) AS "min" FROM users;
 
-CREATE VIEW aggs_v AS 
-SELECT * FROM shops_agg UNION SELECT * FROM reviews_agg UNION SELECT * FROM users_agg;
+CREATE VIEW aggs_imv AS 
+SELECT * FROM shops_agg_imv UNION SELECT * FROM reviews_agg_imv UNION SELECT * FROM users_agg_imv;
 
 --
 -- 横浜市内でまだ自分がラーメンレビューを登録していない店舗ビュー
