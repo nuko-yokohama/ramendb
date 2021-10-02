@@ -246,7 +246,18 @@ FROM ( SELECT user_review_area_v.uid,
             rank() OVER (PARTITION BY user_review_area_v.uid ORDER BY user_review_area_v.count DESC, user_review_area_v.rid DESC) AS rank FROM user_review_area_v) t
 WHERE t.rank = 1;
 
+
+-- uid = 8999 のユーザの横浜市内の家系レビュー率
+CREATE VIEW nuko_yokohama_house_rate AS
+WITH
+sr AS
+(SELECT COUNT(*) FROM shops s WHERE s.area ~ '横浜市' AND tags @> '{家系}' AND status = 'open'),
+rr AS
+(SELECT COUNT(DISTINCT r.sid) FROM shops s JOIN reviews r ON (s.sid = r.sid) WHERE r.uid = 8999 AND s.area ~ '横浜市' AND tags @> '{家系}' AND status = 'open')
+SELECT sr.count AS 家系店舗数, rr.count AS レビュー済み店舗数, ROUND((rr.count::numeric / sr.count * 100),1) AS rate FROM sr, rr
+;
+
+
 --
 -- PostgreSQL database dump complete
 --
-
