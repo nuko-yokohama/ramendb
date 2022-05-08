@@ -46,3 +46,17 @@ FROM shops s
 WHERE s.area ~ '横浜市*' AND s.status = 'open' AND s.category @> '{"ramendb":true}' AND 
   s.sid NOT IN (SELECT sid FROM reviews WHERE uid = 8999);
 
+--
+-- shops and reviews aggregates(view)
+--
+CREATE VIEW shops_agg_v AS
+SELECT 'shops' AS tablename, COUNT(*) AS count, MAX(sid) AS "max", MIN(sid) AS "min" FROM shops;
+
+CREATE VIEW reviews_agg_v AS
+SELECT 'reviews' AS tablename, COUNT(*) AS count, MAX(rid) AS "max", MIN(rid) AS "min" FROM reviews;
+
+CREATE VIEW users_agg_v AS
+SELECT 'users' AS tablename, COUNT(*) AS count, MAX(uid) AS "max", MIN(uid) AS "min" FROM users;
+
+CREATE VIEW aggs_v AS
+SELECT * FROM shops_agg_v UNION SELECT * FROM reviews_agg_v UNION SELECT * FROM users_agg_v;
