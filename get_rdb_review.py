@@ -48,6 +48,7 @@ def printReview(num):
 	url = 'https://supleks.jp/review/' + str(num) + '.html'
 	try:
 		res = req.urlopen(url)
+		# print("req.urlopen")
 		if res is None :
 			print("urlopen error.")
 			retrun
@@ -57,6 +58,7 @@ def printReview(num):
 			print ("BeautifulSoup error.")
 			return
 
+		# print("get soup")
 		# menu
 		# menuNode = soup.find('span', itemprop="itemReviewed")
 		menuNode = soup.find('div', class_="menu")
