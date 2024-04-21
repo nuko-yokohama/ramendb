@@ -3,6 +3,8 @@ import urllib.request as req
 import sys
 import codecs
 import types
+import datetime
+from datetime import datetime
 
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL)
@@ -15,7 +17,7 @@ def url2uid(url):
 	return url.replace('/u/','').replace('.html', '')
 
 #
-# url2uid
+# url2sid
 # replace /s/xxxx.html to xxxx
 #
 def url2sid(url):
@@ -43,6 +45,15 @@ def getCategory(t):
 		category = 'その他'
 	return category
 	
+#
+# YYYY年M月D日 形式を YYYY-MM-DD 形式に変換する
+#
+def convert_date(date_string):
+	# 日付文字列を解析してdatetimeオブジェクトに変換
+	date_obj = datetime.strptime(date_string, "%Y年%m月%d日 %H:%M")
+	# YYYY-MM-DD形式に変換
+	formatted_date = date_obj.strftime("%Y-%m-%d")
+	return formatted_date
 
 def printReview(num):
 	url = 'https://supleks.jp/review/' + str(num) + '.html'
@@ -109,14 +120,12 @@ def printReview(num):
 		# shop_id
 		shop_id = url2sid(links[0].attrs['href'])
 
-		if len(links) == 5 :
-			# Japan shop review
+		if len(links) == 4 :
 			# user_id
 			user_id = url2uid(links[3].attrs['href'])
 		else :
-			# Foreign shop review
-			# user_id
-			user_id = url2uid(links[2].attrs['href'])
+			# user_id(invelid record)
+			user_id = 0
 
 		# likes
 		likesLink = soup.find('a', class_="iine disabled")
@@ -124,7 +133,8 @@ def printReview(num):
 
 
 		# timestamp
-		review_timestamp = soup.find('time').attrs['datetime']
+		# review_timestamp = soup.find('time').attrs['datetime']
+		review_timestamp = convert_date(soup.find('time').text)
 
 		# print review information
 		rv = format(num) + '\t' + menu + '\t' + score + '\t' + category + '\t' + _type + '\t' + soup_type + '\t' + shop_id + '\t' + user_id + '\t' + likes + '\t' + review_timestamp[:10]
