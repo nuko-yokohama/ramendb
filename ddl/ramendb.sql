@@ -227,6 +227,7 @@ SELECT u.uid,
 FROM shops s
     JOIN reviews r ON s.sid = r.sid
     JOIN users u ON r.uid = u.uid
+WHERE r.category = 'ラーメン'
 GROUP BY u.uid, s.pref, s.area
 ;
 
